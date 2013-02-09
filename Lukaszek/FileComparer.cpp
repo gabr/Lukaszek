@@ -2,7 +2,7 @@
 
 FileComparer::FileComparer(void)
 {
-
+    prepareCompareArray();
 };
 
 FileComparer::~FileComparer(void)
@@ -87,6 +87,34 @@ long FileComparer::getNumberOfLinesInCompared() {
     return lines;
 };
 
+long FileComparer::getLinePositionInPatternFile(long num) {
+    string line;
+    long lines = 0;
+
+    setPatternFile(path_pattern);
+    while(fs_pattern.good()) {
+        getline(fs_pattern, line);
+        ++lines;
+        if(lines == num);
+    }
+
+    return fs_pattern.tellp();
+}
+
+long FileComparer::getLinePositionInComparedFile(long num) {
+    string line;
+    long lines = 0;
+
+    setComparedFile(path_pattern);
+    while(fs_compared.good()) {
+        getline(fs_compared, line);
+        ++lines;
+        if(lines == num);
+    }
+
+    return fs_compared.tellp();
+}
+
 string FileComparer::getLineFromPatternFile(int line_number){
     int lines;
     string line;
@@ -139,15 +167,15 @@ void FileComparer::compare() {
             } else
                 compare_matrix[i][j] = false;
 
-    // wypisuje tablice porównañ
-    //for(int i = 0; i < compare_matrix.size(); i++) {
-    //    for(int j = 0; j < compare_matrix[i].size(); j++)
-    //        if(compare_matrix[i][j]) {
-    //            cout << "1 ";
-    //        } else
-    //            cout << "0 ";
-    //        cout << endl;
-    //}
+            // wypisuje tablice porównañ
+            //for(int i = 0; i < compare_matrix.size(); i++) {
+            //    for(int j = 0; j < compare_matrix[i].size(); j++)
+            //        if(compare_matrix[i][j]) {
+            //            cout << "1 ";
+            //        } else
+            //            cout << "0 ";
+            //        cout << endl;
+            //}
 };
 
 void FileComparer::printDif() {
@@ -171,13 +199,107 @@ void FileComparer::printDif() {
                     break;
                 } else if(j == compare_matrix[i].size()-1)
                     cout << i+1 << " - " << getLineFromPatternFile(i+1) << endl;
-        if(i == compare_matrix.size()-1 && position < compare_matrix[i].size())
-            for(int j = position; j < compare_matrix[i].size(); j++)
-                cout << "+ " << j+1 << " " << getLineFromComparedFile(j+1) << endl;
-        else if(position == compare_matrix[i].size() && i != compare_matrix.size()-1) {
-            for(int j = i; j < compare_matrix.size(); j++)
-                cout << j+1 << " - " << getLineFromPatternFile(j+1) << endl;
-            break;
-        }
+                if(i == compare_matrix.size()-1 && position < compare_matrix[i].size())
+                    for(int j = position; j < compare_matrix[i].size(); j++)
+                        cout << "+ " << j+1 << " " << getLineFromComparedFile(j+1) << endl;
+                else if(position == compare_matrix[i].size() && i != compare_matrix.size()-1) {
+                    for(int j = i; j < compare_matrix.size(); j++)
+                        cout << j+1 << " - " << getLineFromPatternFile(j+1) << endl;
+                    break;
+                }
     }
+};
+
+bool FileComparer::overwritePattern() {
+    string line;
+
+    if(!createNew("tmp.txt"))
+        return false;
+
+    ifstream tmp("tmp.txt");
+    if(!tmp.is_open())
+        return false;
+
+    fs_pattern.close();
+    ofstream new_pattern(path_pattern);
+
+    while(tmp.good()) {
+        getline(tmp, line);
+        new_pattern << line << endl;
+    }
+
+    tmp.close();
+    new_pattern.close();
+    setPatternFile(path_pattern);
+
+    if(remove("tmp.txt") != 0)
+        cout << "NIE USUNIETO PLIKU TYMCZASOWEGO" << endl;
+
+    return true;
+};
+
+bool FileComparer::overwriteCompared() {
+    string line;
+
+    if(!createNew("tmp.txt"))
+        return false;
+
+    ifstream tmp("tmp.txt");
+    if(!tmp.is_open())
+        return false;
+
+    fs_compared.close();
+    ofstream new_compared(path_compared);
+
+    while(tmp.good()) {
+        getline(tmp, line);
+        new_compared << line << endl;
+    }
+
+    tmp.close();
+    new_compared.close();
+    setComparedFile(path_compared);
+
+    remove("tmp.txt");
+
+    return true;
+};
+
+bool FileComparer::createNew(string path_new) {
+    ofstream new_file(path_new);
+
+    if(!new_file.is_open()) return false;
+
+    long position = 0;
+
+    setPatternFile(path_pattern);
+    setComparedFile(path_compared);
+
+    for(int i = 0; i < compare_matrix.size(); i++){
+        if(compare_matrix[i][position]) {
+            new_file << getLineFromPatternFile(i+1) << endl;
+            ++position;
+        } else
+            for(int j = position; j < compare_matrix[i].size(); j++)
+                if(compare_matrix[i][j]) {
+                    for(int k = position; k < j; k++)
+                        new_file << getLineFromComparedFile(k+1) << endl;
+                    position = j;
+                    new_file << getLineFromPatternFile(i+1) << endl;
+                    ++position;
+                    break;
+                } else if(j == compare_matrix[i].size()-1)
+                    new_file << getLineFromPatternFile(i+1) << endl;
+                if(i == compare_matrix.size()-1 && position < compare_matrix[i].size())
+                    for(int j = position; j < compare_matrix[i].size(); j++)
+                        new_file << getLineFromComparedFile(j+1) << endl;
+                else if(position == compare_matrix[i].size() && i != compare_matrix.size()-1) {
+                    for(int j = i; j < compare_matrix.size(); j++)
+                        new_file << getLineFromPatternFile(j+1) << endl;
+                    break;
+                }
+    }
+
+    new_file.close();
+    return true;
 };

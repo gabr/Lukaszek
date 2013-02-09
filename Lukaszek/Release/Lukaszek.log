@@ -1,7 +1,28 @@
-﻿Build started 2013-02-05 16:12:32.
+﻿Build started 2013-02-09 20:27:31.
      1>Project "C:\Users\gabr\Documents\Visual Studio 2012\Projects\Lukaszek\Lukaszek\Lukaszek.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc110.pdb" /FR"Release\\" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         C:\Program Files\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc110.pdb" /FR"Release\\" /Gd /TP /analyze- /errorReport:prompt FileComparer.cpp main.cpp
+         FileComparer.cpp
+     1>FileComparer.cpp(36): warning C4244: 'initializing' : conversion from 'std::streamoff' to 'long', possible loss of data
+     1>FileComparer.cpp(51): warning C4244: 'initializing' : conversion from 'std::streamoff' to 'long', possible loss of data
+     1>FileComparer.cpp(99): warning C4390: ';' : empty controlled statement found; is this the intent?
+     1>FileComparer.cpp(101): warning C4244: 'return' : conversion from 'std::streamoff' to 'long', possible loss of data
+     1>FileComparer.cpp(113): warning C4390: ';' : empty controlled statement found; is this the intent?
+     1>FileComparer.cpp(115): warning C4244: 'return' : conversion from 'std::streamoff' to 'long', possible loss of data
+     1>FileComparer.cpp(121): warning C4244: 'initializing' : conversion from 'std::streamoff' to 'long', possible loss of data
+     1>FileComparer.cpp(136): warning C4244: 'initializing' : conversion from 'std::streamoff' to 'long', possible loss of data
+     1>FileComparer.cpp(161): warning C4018: '<' : signed/unsigned mismatch
+     1>FileComparer.cpp(162): warning C4018: '<' : signed/unsigned mismatch
+     1>FileComparer.cpp(187): warning C4018: '<' : signed/unsigned mismatch
+     1>FileComparer.cpp(192): warning C4018: '<' : signed/unsigned mismatch
+     1>FileComparer.cpp(202): warning C4018: '<' : signed/unsigned mismatch
+     1>FileComparer.cpp(203): warning C4018: '<' : signed/unsigned mismatch
+     1>FileComparer.cpp(206): warning C4018: '<' : signed/unsigned mismatch
+     1>FileComparer.cpp(278): warning C4018: '<' : signed/unsigned mismatch
+     1>FileComparer.cpp(283): warning C4018: '<' : signed/unsigned mismatch
+     1>FileComparer.cpp(293): warning C4018: '<' : signed/unsigned mismatch
+     1>FileComparer.cpp(294): warning C4018: '<' : signed/unsigned mismatch
+     1>FileComparer.cpp(297): warning C4018: '<' : signed/unsigned mismatch
          main.cpp
        Link:
          C:\Program Files\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\gabr\Documents\Visual Studio 2012\Projects\Lukaszek\Release\Lukaszek.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\gabr\Documents\Visual Studio 2012\Projects\Lukaszek\Release\Lukaszek.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\gabr\Documents\Visual Studio 2012\Projects\Lukaszek\Release\Lukaszek.lib" /MACHINE:X86 /SAFESEH Release\FileComparer.obj
@@ -15,4 +36,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:05.46
+Time Elapsed 00:00:05.91
