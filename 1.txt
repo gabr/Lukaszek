@@ -55,3 +55,4 @@ void freeMemory(char* buf_a, char* buf_b, FILE* f_a, FILE* f_b,
     struct functions* s_p);
 
 #endif
+

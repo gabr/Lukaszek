@@ -151,6 +151,11 @@ void FileComparer::prepareCompareArray() {
     compare_matrix.resize(rows, vector<bool>(columns, false));
 };
 
+bool FileComparer::isFileExist(string path) {
+    ifstream ifile(path);
+    return ifile;
+}
+
 void FileComparer::compare() {
     long position = 0;
     prepareCompareArray();
@@ -301,5 +306,103 @@ bool FileComparer::createNew(string path_new) {
     }
 
     new_file.close();
+    return true;
+};
+
+bool FileComparer::block_fromPatternToCompared(long pattern_x, long pattern_y, long compared_x, long compared_y){
+
+    string line;
+    
+    if(!block_createNew_fromPatternToCompared("tmp.txt", pattern_x, pattern_y, compared_x, compared_y))
+        return false;
+
+    fs_compared.close();
+    ofstream compared_tmp(path_compared);
+    ifstream tmp("tmp.txt");
+
+    while(tmp.good()) {
+        getline(tmp, line);
+        compared_tmp << line << endl;
+    }
+
+    tmp.close();
+    compared_tmp.close();
+    setComparedFile(path_compared);
+
+    remove("tmp.txt");
+
+    return true;
+};
+
+bool FileComparer::block_fromComparedToPattern(long compared_x, long compared_y, long pattern_x, long pattern_y){
+
+    string line;
+    
+    if(!block_createNew_fromComparedToPattern("tmp.txt", compared_x, compared_y, pattern_x, pattern_y))
+        return false;
+
+    fs_pattern.close();
+    ofstream pattern_tmp(path_pattern);
+    ifstream tmp("tmp.txt");
+
+    while(tmp.good()) {
+        getline(tmp, line);
+        pattern_tmp << line << endl;
+    }
+
+    tmp.close();
+    pattern_tmp.close();
+    setPatternFile(path_pattern);
+
+    remove("tmp.txt");
+
+    return true;
+};
+
+bool FileComparer::block_createNew_fromPatternToCompared(string path, long pattern_x, long pattern_y, long compared_x, long compared_y){
+
+    ofstream new_file(path);
+
+    if(!new_file.is_open()) return false;
+
+    setPatternFile(path_pattern);
+    setComparedFile(path_compared);
+
+    for (int i = 1; i <= compared_x; i++)
+        new_file << getLineFromComparedFile(i) << endl;
+
+    for(int i = pattern_x; i <= pattern_y; i++)
+        new_file << getLineFromPatternFile(i) << endl;
+
+    if(compared_x == compared_y) ++compared_y;
+    for (int i = compared_y; i <= getNumberOfLinesInCompared(); i++)
+        new_file << getLineFromComparedFile(i) << endl;
+
+    new_file.close();
+
+    return true;
+};
+
+bool FileComparer::block_createNew_fromComparedToPattern(string path, long compared_x, long compared_y, long pattern_x, long pattern_y){
+
+    ofstream new_file(path);
+
+    if(!new_file.is_open()) return false;
+
+    setPatternFile(path_pattern);
+    setComparedFile(path_compared);
+
+    for (int i = 1; i <= pattern_x; i++)
+        new_file << getLineFromPatternFile(i) << endl;
+
+    for(int i = compared_x; i <= compared_y; i++)
+        new_file << getLineFromComparedFile(i) << endl;
+
+    if(pattern_x == pattern_y) ++pattern_y;
+    for(int i = pattern_y; i <= getNumberOfLinesInPattern(); i++)
+        new_file << getLineFromPatternFile(i) << endl;
+
+    new_file.close();
+
     return true;
 };
